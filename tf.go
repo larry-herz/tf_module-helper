@@ -47,7 +47,7 @@ func main() {
 	// Check for the AWS prefix on the module, if found create the AWS-providers.txt file for testing
 	cloud = strings.Split(modulename, "-")[0]
 	switch cloud {
-	case "AWS":
+	case "aws":
 		createFile("AWS-providers.txt")
 		writeFile("AWS-providers.txt")
 	}
