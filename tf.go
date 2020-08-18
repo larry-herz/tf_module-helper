@@ -98,7 +98,7 @@ func writeFile(filename string) {
 			return
 		}
 
-		_, err = file.WriteString(fmt.Sprintf("```terraform\nmodule '%s' {\n  source = '<path to Source>'\n  name   = '<name of this resource>'\n}\n```\n", modulename))
+		_, err = file.WriteString(fmt.Sprintf("```terraform\nmodule \"%s\" {\n  source = \"git::git@ssh.dev.azure.com:v3/thinkahead-azure/client-scadm/%s?ref=master\"\n  tags = {\n    \"key\" = \"value\"\n  }\n}\n```\n", modulename, modulename))
 		if isError(err) {
 			return
 		}
@@ -114,7 +114,7 @@ func writeFile(filename string) {
 				return
 		}
 
-		_, err = file.WriteString(fmt.Sprintf("  source = \"git::git@ssh.dev.azure.com:v3/thinkahead-azure/client-scadm/%s?ref=master\"\n}", modulename))
+		_, err = file.WriteString(fmt.Sprintf("  source = \"git::git@ssh.dev.azure.com:v3/thinkahead-azure/client-scadm/%s?ref=master\"\n }", modulename))
 		if isError(err) {
 			return
 		}
