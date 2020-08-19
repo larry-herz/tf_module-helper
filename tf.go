@@ -79,7 +79,7 @@ func writeFile(filename string) {
 	case "README.md":
 
 		// Write some text line-by-line to file.
-		_, err = file.WriteString(fmt.Sprintf("# %s \n\n", modulename))
+		_, err = file.WriteString(fmt.Sprintf("# %s\n\n", modulename))
 		if isError(err) {
 				return
 		}
@@ -134,13 +134,12 @@ func writeFile(filename string) {
 		}
 
 	case "AWS-providers.txt":
-		_, err = file.WriteString("terraform {\n  required_providers {\n    aws = {\n      source = \"hashicorp/aws\"\n      version = \"3.0.0\n    }\n  }\n  required_version = \"0.13\"\n}\n\n")
-
+		_, err = file.WriteString("terraform {\n  required_providers {\n    aws = {\n      source = \"hashicorp/aws\"\n      version = \"~>3.1.0\"\n    }\n    random = {\n      source=\"hashicorp/random\"\n      version = \"~>2.3.0\"\n    }\n  }\n  required_version = \"0.13\"\n}\n\n")
 		if isError(err) {
 				return
 		}
 
-		_, err = file.WriteString("provider \"aws\" {\n  profile = var.profile \n  region = var.region\n\n  assume_role { \n    role_arn = var.arn_name\n    external_id = vr.ext.id\n  }\n}\n")
+		_, err = file.WriteString("provider \"aws\" {\n  profile = var.profile \n  region = var.region\n\n  assume_role { \n    role_arn = var.arn_name\n    external_id = var.ext.id\n  }\n}\n")
 
 		if isError(err) {
 				return
