@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"io"
-	"os"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -49,8 +49,11 @@ func main() {
 	cloud = strings.Split(modulename, "-")[0]
 	switch cloud {
 	case "aws":
-		createFile("AWS-providers.txt")
-		writeFile("AWS-providers.txt")
+		createFile("aws-providers.txt")
+		writeFile("aws-providers.txt")
+	case "azurerm":
+		createFile("azurerm-providers.txt")
+		writeFile("azurerm-providers.txt")
 	}
 }
 
@@ -60,11 +63,11 @@ func createFile(filename string) {
 
 	// create file if not exists
 	if os.IsNotExist(err) {
-			var file, err = os.Create(filename)
-			if isError(err) {
-					return
-			}
-			defer file.Close()
+		var file, err = os.Create(filename)
+		if isError(err) {
+			return
+		}
+		defer file.Close()
 	}
 	fmt.Println("File Created Successfully", filename)
 }
@@ -83,16 +86,16 @@ func writeFile(filename string) {
 		_, err = file.WriteString(fmt.Sprintf("# %s\n\n", modulename))
 
 		if isError(err) {
-				return
+			return
 		}
 		_, err = file.WriteString("## This module builds (what is the module for)\n\n")
 		if isError(err) {
-				return
+			return
 		}
 
 		_, err = file.WriteString("### The following variables are necessary to run this module\n\n* name - (Required) Specifies the name of the resource. Changing this forces a new resource to be created.\n\n")
 		if isError(err) {
-				return
+			return
 		}
 
 		_, err = file.WriteString("### To run this module from a root module\n\n")
@@ -100,7 +103,7 @@ func writeFile(filename string) {
 			return
 		}
 
-		_, err = file.WriteString(fmt.Sprintf("```terraform\nmodule \"%s\" {\n  source = \"git::git@ssh.dev.azure.com:v3/thinkahead-azure/client-scadm/%s?ref=master\"\n  tags = {\n    \"key\" = \"value\"\n  }\n}\n```\n", modulename, modulename))
+		_, err = file.WriteString(fmt.Sprintf("```terraform\nmodule \"%s\" {\n  source = \"git::<YourGitRepoHere>/%s?ref=master\"\n  tags = {\n    \"key\" = \"value\"\n  }\n}\n```\n", modulename, modulename))
 
 		if isError(err) {
 			return
@@ -109,15 +112,15 @@ func writeFile(filename string) {
 		// Write some text line-by-line to file.
 		_, err = file.WriteString("### FOR MANUAL TESTING - Copy the contents of the aws-providers repo into this space. ###\n\n")
 		if isError(err) {
-				return
+			return
 		}
 
-		_, err = file.WriteString(fmt.Sprintf("module %s {\n\n", modulename ))
+		_, err = file.WriteString(fmt.Sprintf("module %s {\n\n", modulename))
 		if isError(err) {
-				return
+			return
 		}
 
-		_, err = file.WriteString(fmt.Sprintf("  source = \"git::git@ssh.dev.azure.com:v3/thinkahead-azure/client-scadm/%s?ref=master\"\n }", modulename))
+		_, err = file.WriteString(fmt.Sprintf("  source = \"git::<YourGitRepoHere>/%s?ref=master\"\n }", modulename))
 
 		if isError(err) {
 			return
@@ -126,36 +129,49 @@ func writeFile(filename string) {
 	case ".gitignore":
 		_, err = file.WriteString("# .tfstate files\n*.tfstate\n*.tfstate.*\n\n# Crash log files\ncrash.log\n\n")
 		if isError(err) {
-				return
+			return
 		}
 		_, err = file.WriteString("#ignore any data contained in the .terraform directory\n**/.terraform\n\n# Ignore .tfvars files generated for a terraform run.\n**/terraform.tfvars\n**/testing.tfvars\n")
 		if isError(err) {
-				return
+			return
 		}
 		_, err = file.WriteString("# Ignore any macOS related extra window size and position data.\n**/.DS_Store\n\n**/aws-providers.txt\n\n**/test.txt")
 		if isError(err) {
-				return
+			return
 		}
 
-	case "AWS-providers.txt":
-		_, err = file.WriteString("terraform {\n  required_providers {\n    aws = {\n      source = \"hashicorp/aws\"\n      version = \"~>3.1.0\"\n    }\n    random = {\n      source=\"hashicorp/random\"\n      version = \"~>2.3.0\"\n    }\n  }\n  required_version = \"0.13\"\n}\n\n")
+	case "aws-providers.txt":
+		_, err = file.WriteString("terraform {\n  required_providers {\n    aws = {\n      source = \"hashicorp/aws\"\n      version = \"~>3.1.0\"\n    }\n    random = {\n      source=\"hashicorp/random\"\n      version = \"~>2.3.0\"\n    }\n  }\n  required_version = \"~>1.0.0\"\n}\n\n")
 
 		if isError(err) {
-				return
+			return
 		}
 
 		_, err = file.WriteString("provider \"aws\" {\n  profile = var.profile \n  region = var.region\n\n  assume_role { \n    role_arn = var.arn_name\n    external_id = var.ext.id\n  }\n}\n")
 
+		if isError(err) {
+			return
+		}
+
+	case "azurerm-providers.txt":
+		_, err = file.WriteString("terraform {\n  required_providers {\n    azurerm = {\n      source = \"hashicorp/azurerm\"\n      version = \"~>2.98.0\"\n    }\n    random = {\n      source=\"hashicorp/random\"\n      version = \"~>3.1.0\"\n    }\n  }\n  required_version = \"~>1.0.0\"\n}\n\n")
 
 		if isError(err) {
-				return
+			return
 		}
-	}
-		// Save file changes.
-		err = file.Sync()
+
+		_, err = file.WriteString("provider \"azurerm\" {\n  features {}\n  skip_provider_registration = true\n}\n")
+
 		if isError(err) {
-				return
+			return
 		}
+
+	}
+	// Save file changes.
+	err = file.Sync()
+	if isError(err) {
+		return
+	}
 	fmt.Println("File Updated Successfully.")
 
 }
@@ -164,25 +180,25 @@ func readFile(filename string) {
 	// Open file for reading.
 	var file, err = os.OpenFile(filename, os.O_RDWR, 0644)
 	if isError(err) {
-			return
+		return
 	}
 	defer file.Close()
 
 	// Read file, line by line
 	var text = make([]byte, 1024)
 	for {
-			_, err = file.Read(text)
+		_, err = file.Read(text)
 
-			// Break if finally arrived at end of file
-			if err == io.EOF {
-					break
-			}
+		// Break if finally arrived at end of file
+		if err == io.EOF {
+			break
+		}
 
-			// Break if error occured
-			if err != nil && err != io.EOF {
-					isError(err)
-					break
-			}
+		// Break if error occured
+		if err != nil && err != io.EOF {
+			isError(err)
+			break
+		}
 	}
 
 	fmt.Println("Reading from file.")
@@ -193,7 +209,7 @@ func deleteFile(filename string) {
 	// delete file
 	var err = os.Remove(filename)
 	if isError(err) {
-			return
+		return
 	}
 
 	fmt.Println("File Deleted")
@@ -201,7 +217,7 @@ func deleteFile(filename string) {
 
 func isError(err error) bool {
 	if err != nil {
-			fmt.Println(err.Error())
+		fmt.Println(err.Error())
 	}
 
 	return (err != nil)
