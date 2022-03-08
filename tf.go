@@ -26,6 +26,7 @@ func main() {
 
 	createFile("main.tf")
 	createFile("variables.tf")
+	createFile("terraform.tfvars")
 	createFile("outputs.tf")
 	createFile(".gitignore")
 	writeFile(".gitignore")
