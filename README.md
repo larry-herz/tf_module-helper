@@ -38,3 +38,22 @@ Create any actual terraform content, beyond the minimal skeleton of code in the 
 ## Caveats
 
 This is very much alpha grade code and while it does what is described above, there is little error handling, and no input checking at this time. The code is built with the possibility of expansion in mind, but the first parameter passed on the command line currently does nothing. It is however required.
+
+### Building the code
+
+The binaries in the respective directories are placed there for "grab and go" usage and may not contain the most recent changes. Building the code will ensure that the binary exactly matches the latest code in the repo. 
+
+The build process is as follows:
+
+From the directory where the go.mod resides binaries for all architectures  may be built.
+
+on a command line execute the following to compile a new binary:
+
+* `GOOS=windows go build` To build the windows `tf.exe` file.
+* `GOOS=linux go build` will build a linux `tf` file.
+* `GOOS=darwin go build` creates the MacOS `tf` file.
+
+copy the file to a directory in the machine's path (such as /usr/local/bin on a Mac or Linux.) or add the loation of the file to the machine's path.
+
+Prefer using the naming convention listed in the Terraform docs for publishing modules on the public registry, using the 
+`terraform-<provider>-<name>` naming convention
