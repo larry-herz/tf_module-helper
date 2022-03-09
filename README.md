@@ -52,6 +52,7 @@ on a command line execute the following to compile a new binary:
 * `GOOS=windows go build` To build the windows `tf.exe` file.
 * `GOOS=linux go build` will build a linux `tf` file.
 * `GOOS=darwin go build` creates the MacOS `tf` file.
+* `GOOS=darwin GOARCH=arm64 go build` creates the Arm64 MacOS `tf` file.
 
 copy the file to a directory in the machine's path (such as /usr/local/bin on a Mac or Linux.) or add the loation of the file to the machine's path.
 
