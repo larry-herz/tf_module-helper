@@ -29,7 +29,7 @@ This program does the following:
 * Create a .gitignore file with basic content in the `<modulename>` directory.
 * Create a `template` folder in the `<modulename>` directory.
 * Create a skeleton `<modulename>.tf` file in the `template` directory.
-* Create a `AWS-providers.txt` file in the `template` directory, if the module name begins with AWS. (The contend of this file is needed for initial manual testing.)
+* Create a `aws-providers.txt`, or `azurerm-providers.txt` file in the `template` directory, if the module name begins with aws or azurerm. (The contend of this file is needed for initial manual testing.)
 
 ## What this program does not do
 
@@ -55,5 +55,5 @@ on a command line execute the following to compile a new binary:
 
 copy the file to a directory in the machine's path (such as /usr/local/bin on a Mac or Linux.) or add the loation of the file to the machine's path.
 
-Prefer using the naming convention listed in the Terraform docs for publishing modules on the public registry, using the 
-`terraform-<provider>-<name>` naming convention
+Prefer using the naming convention listed in the Terraform docs for publishing modules on the public registry, using the
+`<provider>-<name>` naming convention (i.e. `azurerm-network`)
